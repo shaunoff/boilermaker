@@ -2,11 +2,21 @@ const crypto = require('crypto')
 const Sequelize = require('sequelize')
 const db = require('../db')
 
+
+
 const User = db.define('user', {
   email: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false
+  },
+  firstName: {
+    type: Sequelize.STRING,
+    defaultValue: ""
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    defaultValue: ""
   },
   password: {
     type: Sequelize.STRING
@@ -52,6 +62,10 @@ const setSaltAndPassword = user => {
     user.password = User.encryptPassword(user.password, user.salt)
   }
 }
+const addAppraisal = user => {
+  user.createAppraisal()
+}
 
 User.beforeCreate(setSaltAndPassword)
 User.beforeUpdate(setSaltAndPassword)
+User.afterCreate(addAppraisal)

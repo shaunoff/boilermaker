@@ -1,9 +1,16 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
+const Appraisal = require('../db/models/appraisal')
 module.exports = router
 
 router.post('/login', (req, res, next) => {
-  User.findOne({where: {email: req.body.email}})
+  User.findOne({
+    where: {email: req.body.email},
+    include: {
+      model: Appraisal,
+      include: {all: true}
+    }
+  })
     .then(user => {
       if (!user) {
         res.status(401).send('User not found')
@@ -18,6 +25,13 @@ router.post('/login', (req, res, next) => {
 
 router.post('/signup', (req, res, next) => {
   User.create(req.body)
+    .then(user => User.findOne({
+      where: {id: user.id},
+      include: {
+        model: Appraisal,
+        include: {all: true}
+      }
+    }))
     .then(user => {
       req.login(user, err => (err ? next(err) : res.json(user)))
     })

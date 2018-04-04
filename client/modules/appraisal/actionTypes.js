@@ -1,0 +1,2 @@
+export const GET_APPRAISAL = 'GET_APPRAISAL'
+export const UPDATE_APPAISAL = 'UPDATE_APPAISAL'

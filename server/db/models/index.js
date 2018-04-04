@@ -1,18 +1,38 @@
 const User = require('./user')
+const Appraisal = require('./appraisal')
+const SelfAssessment = require('./selfAssessment')
+const ManagerAssessment = require('./managerAssessment')
+const Target = require('./target')
+const Team = require('./team')
+const Role = require('./roles')
 
-/**
- * If we had any associations to make, this would be a great place to put them!
- * ex. if we had another model called BlogPost, we might say:
- *
- *    BlogPost.belongsTo(User)
- */
+User.hasMany(Appraisal)
+Appraisal.belongsTo(User)
 
-/**
- * We'll export all of our models here, so that any time a module needs a model,
- * we can just require it from 'db/models'
- * for example, we can say: const {User} = require('../db/models')
- * instead of: const User = require('../db/models/user')
- */
+User.belongsToMany(Role, {through: 'permissions'})
+Role.belongsToMany(User, {through: 'permissions'})
+// Appraisal.hasOne(SelfAssessment)
+// SelfAssessment.belongsTo(Appraisal)
+//
+// Appraisal.hasOne(ManagerAssessment)
+// ManagerAssessment.belongsTo(Appraisal)
+//
+// Appraisal.hasOne(Target)
+// Target.belongsTo(Appraisal)
+
+// ManagerAssessment.belongsTo(Appraisal)
+// Target.belongsTo(Appraisal)
+
+Team.hasMany(User)
+User.belongsTo(Team)
+
+
 module.exports = {
-  User
+  User,
+  Appraisal,
+  SelfAssessment,
+  ManagerAssessment,
+  Target,
+  Team,
+  Role
 }
